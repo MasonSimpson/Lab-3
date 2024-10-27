@@ -36,6 +36,9 @@ public class TablePanel extends JPanel {
         JScrollPane scrollPane = new JScrollPane(table);
         add(scrollPane);
     }
+    public JTable getTable() {
+        return table;
+    }
 
     // Custom TableModel class for managing table data
     class TableModel extends AbstractTableModel {
