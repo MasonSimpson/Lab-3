@@ -1,9 +1,14 @@
 import javax.swing.*;
+import java.awt.*;
 import java.util.List;
 
 public class StatsPanel extends JPanel {
+    private final int WIDTH = 300;
+    private final int HEIGHT = 150;
+
     public StatsPanel(List<Player> players) {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setPreferredSize(new Dimension(WIDTH, HEIGHT));
 
         int totalPlayers = players.size();
         int totalPoints = players.stream().mapToInt(Player::getPoints).sum();

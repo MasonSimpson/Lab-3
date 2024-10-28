@@ -1,10 +1,14 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.Comparator;
 import java.util.List;
 
 public class Main extends JFrame {
-    private static final int APP_WIDTH = 1600; // Application width constant
-    private static final int APP_HEIGHT = 800; // Application height constant
+    private static final int APP_WIDTH = 1000;
+    private static final int APP_HEIGHT = 800;
+    private static final int STATS_PANEL_HEIGHT = 200;
+    private static final int CHART_PANEL_HEIGHT = 550;
+    private static final int SUB_PANEL_WIDTH = 500;
 
     private TablePanel tablePanel;
     private StatsPanel statsPanel;
@@ -13,7 +17,7 @@ public class Main extends JFrame {
     private List<Player> players;
 
     public Main() {
-        setTitle("NBA Player Data Visualization - Table, Stats, and Chart");
+        setTitle("NBA Player Data Visualization");
         setSize(APP_WIDTH, APP_HEIGHT);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -21,36 +25,80 @@ public class Main extends JFrame {
         DataLoader dataLoader = new DataLoader();
         players = dataLoader.loadData("NBA Stats/nba_23_24_player_stats.txt");
 
+        // Sort players by first name to match table sorting
+        players.sort(Comparator.comparing(player -> player.getName().split(" ")[0]));
+
         // Initialize panels
         tablePanel = new TablePanel(players);
-        statsPanel = new StatsPanel(players); // No changes to StatsPanel
+        statsPanel = new StatsPanel(players);
         chartPanel = new ChartPanel(players);
         detailsPanel = new DetailsPanel();
 
-        // Add selection listener to the TablePanel's table
+        // Add selection listener to the table to update the DetailsPanel
         tablePanel.getTable().getSelectionModel().addListSelectionListener(e -> {
-            int selectedRow = tablePanel.getTable().getSelectedRow();
-            if (selectedRow != -1) {
-                // Get the player from the table model using getValueAt
-                String playerName = (String) tablePanel.getTable().getModel().getValueAt(selectedRow, 0); // Assuming name is in the 1st column
-                Player selectedPlayer = players.stream()
-                        .filter(player -> player.getName().equals(playerName))
-                        .findFirst()
-                        .orElse(null);
+            if (!e.getValueIsAdjusting()) {
+                int selectedRow = tablePanel.getTable().getSelectedRow();
+                if (selectedRow != -1) {
+                    // Convert the view index to the model index
+                    int modelRow = tablePanel.getTable().convertRowIndexToModel(selectedRow);
 
-                // Update details panel if player is found
-                if (selectedPlayer != null) {
-                    detailsPanel.updateDetails(selectedPlayer);
+                    // Access the Player object from the sorted list
+                    if (modelRow >= 0 && modelRow < players.size()) {
+                        Player selectedPlayer = players.get(modelRow);
+                        detailsPanel.updateDetails(selectedPlayer);
+                    }
                 }
             }
         });
 
-        // Set layout and add panels
-        getContentPane().setLayout(new BorderLayout());
-        getContentPane().add(statsPanel, BorderLayout.NORTH); // StatsPanel on top
-        getContentPane().add(tablePanel, BorderLayout.CENTER); // TablePanel in the center
-        getContentPane().add(chartPanel, BorderLayout.SOUTH); // ChartPanel at the bottom
-        getContentPane().add(detailsPanel, BorderLayout.EAST); // DetailsPanel on the right
+        // Main container panel with BorderLayout
+        setLayout(new BorderLayout());
+
+        // Left side panel with vertical BoxLayout
+        JPanel leftPanel = new JPanel();
+        leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
+        leftPanel.setPreferredSize(new Dimension(SUB_PANEL_WIDTH, APP_HEIGHT));
+
+        // Add StatsPanel to the left side
+        statsPanel.setPreferredSize(new Dimension(SUB_PANEL_WIDTH, STATS_PANEL_HEIGHT));
+        leftPanel.add(statsPanel);
+
+        // Add ChartPanel to the left side
+        chartPanel.setPreferredSize(new Dimension(SUB_PANEL_WIDTH, CHART_PANEL_HEIGHT));
+        leftPanel.add(chartPanel);
+
+        // Right side panel with GridBagLayout
+        JPanel rightPanel = new JPanel(new GridBagLayout());
+        rightPanel.setPreferredSize(new Dimension(SUB_PANEL_WIDTH, APP_HEIGHT));
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.BOTH;
+
+        // Add TablePanel to the top-right
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 1.0;
+        gbc.weighty = 0.4;
+        tablePanel.setPreferredSize(new Dimension(SUB_PANEL_WIDTH, 300)); // Reduced height
+        rightPanel.add(tablePanel, gbc);
+
+        // Add DetailsPanel to the bottom-right
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.weightx = 1.0;
+        gbc.weighty = 0.6;
+        rightPanel.add(detailsPanel, gbc);
+
+        // Add left and right panels to the main frame
+        add(leftPanel, BorderLayout.WEST);
+        add(rightPanel, BorderLayout.EAST);
+
+        // Force revalidation to prevent initial cutoff in TablePanel
+        SwingUtilities.invokeLater(() -> {
+            pack();
+            tablePanel.getTable().revalidate();
+            tablePanel.getTable().repaint();
+        });
     }
 
     public static void main(String[] args) {
