@@ -5,6 +5,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+// Main panel that contains all panels used in the application
+// Also contains the main function where the application is run
 public class Main extends JFrame {
     //Constants to avoid use of magic numbers
     private static final int APP_WIDTH = 1000;

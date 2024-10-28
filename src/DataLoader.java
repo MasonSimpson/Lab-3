@@ -1,6 +1,9 @@
 import java.io.*;
 import java.util.*;
 
+// Loads data from the text file and creates player objects for each
+// Player that is listed in the file. Creates a list of player objects
+// To store every player and their stats to use for the stats application
 public class DataLoader {
     public List<Player> loadData(String fileName) {
         List<Player> players = new ArrayList<>();

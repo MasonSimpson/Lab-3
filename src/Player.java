@@ -1,7 +1,5 @@
-/*
-Player class created by Mason Simpson
- */
 
+// Player object that stores stats
 public class Player {
     //Private variable declaration
     private String name;

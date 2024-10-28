@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
+// Displays the total stats from every player in the 23-24 season
+// Updates depending on what filters are selected
 public class StatsPanel extends JPanel {
     private final int WIDTH = 300;
     private final int HEIGHT = 150;

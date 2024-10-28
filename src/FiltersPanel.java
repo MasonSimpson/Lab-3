@@ -1,12 +1,13 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+// This panel is located at the top of the program and contains the filters
+// Used to manipulate the data. There is a dropdown menu to select a specific
+// Team, and there are 2 JCheckBoxes to filter by conference
 public class FiltersPanel extends JPanel {
     private static final int PADDING = 10;
     private static final String ALL_TEAMS = "All Teams";
@@ -59,7 +60,7 @@ public class FiltersPanel extends JPanel {
                         (!removeEast || !isEastTeam(player.getTeam())))
                 .collect(Collectors.toList());
 
-        // Update TablePanel and ChartPanel
+        // Update panels
         tablePanel.updateTable(filteredPlayers);
         chartPanel.updateChart(filteredPlayers);
         statsPanel.updateStats(filteredPlayers);

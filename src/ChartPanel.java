@@ -5,6 +5,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
+// This panel displays a pie chart that shows how many points each team scored
+// Gets updated depending on what filters are selected
+// NOTE: There are some players that played in the 23-24 season that were dropped
+// out of the league during the season, so if you choose to filter out both the
+// east and west conference teams, a "null" team with some players will still
+// display some data for those players. MY CODE IS NOT BROKEN, THIS WORKS AS INTENDED
 public class ChartPanel extends JPanel {
     private List<Player> players;
 

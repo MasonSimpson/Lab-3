@@ -3,6 +3,9 @@ import javax.swing.table.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
+// This panels contains the table that displays every single player that played
+// In the 2023-2024 NBA Season. It contains their name, what team they played for,
+// And the total amount of points they scored that season
 public class TablePanel extends JPanel {
     private static final String[] COLUMNS = {"Name", "Team", "Points"}; // Updated columns
     private static final int[] COLUMN_WIDTHS = {100, 90, 60}; // Set column widths
