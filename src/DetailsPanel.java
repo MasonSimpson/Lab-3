@@ -2,11 +2,14 @@ import javax.swing.*;
 import java.awt.*;
 
 public class DetailsPanel extends JPanel {
+    // Declaring all the jlabels
     private JLabel nameLabel, teamLabel, gamesPlayedLabel, totalPointsLabel,
             totalAssistsLabel, totalReboundsLabel, totalStealsLabel, totalBlocksLabel;
+    private final int ROWS = 8;
+    private final int COLS = 1;
 
     public DetailsPanel() {
-        setLayout(new GridLayout(8, 1));
+        setLayout(new GridLayout(ROWS, COLS));
         nameLabel = new JLabel();
         teamLabel = new JLabel();
         gamesPlayedLabel = new JLabel();

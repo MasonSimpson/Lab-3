@@ -36,8 +36,20 @@ public class TablePanel extends JPanel {
         JScrollPane scrollPane = new JScrollPane(table);
         add(scrollPane);
     }
+
     public JTable getTable() {
         return table;
+    }
+
+    public TableModel getTableModel() {
+        return tableModel;
+    }
+
+    // Method to update table data based on filtered players
+    public void updateTable(List<Player> filteredPlayers) {
+        tableModel.updateData(filteredPlayers);
+        table.revalidate(); // Refresh the table
+        table.repaint();
     }
 
     // Custom TableModel class for managing table data
@@ -45,7 +57,7 @@ public class TablePanel extends JPanel {
         private List<Player> players;
 
         public TableModel(List<Player> players) {
-            this.players = players;
+            this.players = new ArrayList<>(players);
         }
 
         @Override
@@ -84,6 +96,12 @@ public class TablePanel extends JPanel {
 
         public Player getPlayerAt(int row) {
             return players.get(row);
+        }
+
+        // Method to update data based on filters
+        public void updateData(List<Player> newPlayers) {
+            this.players = new ArrayList<>(newPlayers);
+            fireTableDataChanged(); // Notify the table about the data change
         }
     }
 }

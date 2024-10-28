@@ -32,6 +32,12 @@ public class ChartPanel extends JPanel {
         add(chartArea, BorderLayout.CENTER);
     }
 
+    // Method to update chart when filters are applied
+    public void updateChart(List<Player> filteredPlayers) {
+        this.players = filteredPlayers;
+        repaint();
+    }
+
     private void drawPieChart(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
         Map<String, Integer> teamPoints = calculateTeamPoints();
